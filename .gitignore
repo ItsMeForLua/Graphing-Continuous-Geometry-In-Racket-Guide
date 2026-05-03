@@ -1,3 +1,4 @@
+.venv/
 *.aux
 *.bbl
 *.bcf
@@ -7,4 +8,15 @@
 *.synctex.gz
 *.out
 *.toc
-.venv
+*.lwarpmkconf
+*_html.tex
+*.cut
+*.ist
+*.conf
+*.xdy
+*.json
+~*
+*.css
+
+!docs/
+!docs/**

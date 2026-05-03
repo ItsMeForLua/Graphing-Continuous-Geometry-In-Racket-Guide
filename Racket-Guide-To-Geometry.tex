@@ -1,27 +1,31 @@
 \documentclass[12pt, letterpaper]{article}
-
-% --- Page Layout ---
-\usepackage[margin=1in]{geometry}
-\usepackage{setspace}
-\doublespacing
-
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
 \usepackage{lmodern}
+\usepackage[
+mathjax,
+ImagesDirectory=imgs,
+ImagesName={lateximg-}
+]{lwarp}
+\usepackage[margin=1in]{geometry}
+\usepackage{setspace}
+\doublespacing
 \usepackage{csquotes}
 \usepackage{textalpha}
 \usepackage{alphabeta}
 
+\setlength{\marginparwidth}{2cm}
+\usepackage[disable]{todonotes}
+
 \DeclareUnicodeCharacter{2227}{\ensuremath{\wedge}}
 \DeclareUnicodeCharacter{00AC}{\ensuremath{\neg}}
 \DeclareUnicodeCharacter{2192}{\ensuremath{\rightarrow}}
+
 \usepackage{amsmath, amssymb, graphicx}
 \usepackage{textcomp}
 \usepackage{listings}
 \usepackage{xcolor}
 \usepackage{tikz}
-\usepackage[disable]{todonotes}
-\usepackage{graphicx}
 \usepackage{float}
 \usepackage{tikz-3dplot}
 \usepackage{pgfplots}
@@ -69,6 +73,11 @@
 \newcommand{\xy}{\((x,y)\) }
 
 \usepackage{FootnotesMacros}
+\begin{warpMathJax}
+	\CustomizeMathJax{\DeclarePairedDelimiter{\norm}{\lVert}{\rVert}}
+	\CustomizeMathJax{\newcommand{\vecnorm}[1]{\norm*{\vec{#1}}}}
+	\CustomizeMathJax{\newcommand{\vechat}[1]{\norm*{\hat{#1}}}}
+\end{warpMathJax}
 
 \title{Directed Dimensions: Basic and Fundamental Transformations in n-dimensional Space}
 \author{Andrew D. France}

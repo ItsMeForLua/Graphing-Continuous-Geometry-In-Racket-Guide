@@ -2,7 +2,7 @@ PYTHON ?= python
 VENV_DIR := .venv
 PROCESS_DIR := ../ProcessProse
 
-.PHONY: venv install-pylibs style-check clean n-tree _check_venv _check_venv_activated
+.PHONY: venv install-pylibs style-check clean-tex clean-scripts clean-lwarp clean-docs clean-all-exclude-docs clean-all-include-docs n-tree lwarpmk limages find-html-deps compile-tex docs auto-run _check_venv _check_venv_activated
 
 venv:
 	@test -d "$(VENV_DIR)" || \
@@ -36,6 +36,89 @@ n-tree: _check_venv _check_venv_activated
 style-check: _check_venv _check_venv_activated
 	@python $(PROCESS_DIR)/Stylometric_Analysis.py "$(FILE).pdf" Stylometric_Analysis.json
 
-clean: 
-	@echo "Cleaning Directory..."
-	@rm -f *.aux *.bbl *.bcf *.blg *.log *.run.xml *.synctex.gz *.out *.toc *.txt *.json ~*
+clean-tex: 
+	@echo "Cleaning directory of tex artifacts..."
+	@rm -f *.aux *.bbl *.bcf *.blg *.log *.run.xml *.synctex.gz *.out *.toc
+
+clean-scripts:
+	@echo "Cleaning directory of scripts artifacts..."
+	@rm -f *.txt *.json ~*
+
+clean-lwarp:
+	@echo "Cleaning directory of lwarp artifacts..."
+	@rm -f *.lwarpmkconf *_html.tex *.cut *.css *.ist *.conf *.xdy *_html.pdf *.sidetoc *_html.html
+
+clean-docs:
+	@echo "Cleaning docs/ completely..."
+	@rm -rf docs/
+
+clean-all-exclude-docs:
+	@$(MAKE) clean-tex
+	@$(MAKE) clean-scripts
+	@$(MAKE) clean-lwarp
+	@echo "Cleaned project of all artifacts excluding docs/..."
+
+clean-all-include-docs:
+	@$(MAKE) clean-tex
+	@$(MAKE) clean-scripts
+	@$(MAKE) clean-lwarp
+	@$(MAKE) clean-docs
+	@echo "Cleaned project of all artifacts including docs/..."
+
+docs:
+	@echo "FILE is currently set to: '$(FILE)'"; \
+	if [ -z "$(FILE)" ]; then \
+		echo "Warning: FILE is empty."; \
+		echo "Expected usage: make docs FILE=File-Name-Without-Extension"; \
+		exit 1; \
+	fi; \
+	printf "Proceed? [y/N] "; \
+	read ans; \
+	case "$$ans" in \
+		[yY]|[yY][eE][sS]) ;; \
+		*) echo "Aborted."; exit 1 ;; \
+	esac
+	@echo "Building docs/ directory..."
+	@mkdir -p docs
+	@cp "$(FILE).html" docs/index.html
+	@# 1. Copy manual core support files
+	@cp lwarp.css lwarp_formal.css lwarp_sagebrush.css lwarp_mathjax.txt docs/
+	@# 2. Dynamically discover and copy local assets referenced in the HTML
+	@grep -oE '(href|src)="[^"]+"' "$(FILE).html" | \
+		sed -n 's/.*="\([^/:][^"]*\)".*/\1/p' | \
+		sort -u | \
+		while read -r file; do \
+			if [ -e "$$file" ]; then \
+				cp -r "$$file" docs/; \
+				echo "Copied asset: $$file"; \
+			fi; \
+		done
+	
+lwarpmk:
+	@echo "Running lwarpmk html $(FILE)"
+	@lwarpmk html $(FILE)
+
+limages:
+	@echo "Running lwarpmk limages for $(FILE)..."
+	@if [ -f "$(FILE)-images.txt" ]; then \
+		lwarpmk limages $(FILE); \
+	else \
+		echo "No $(FILE)-images.txt found; skipping limages."; \
+	fi
+
+find-html-deps:
+	@grep -oE '(href|src)="[^"]+"' '$(FILE).html'
+
+compile-tex:
+	@echo "Compiling $(FILE).tex into $(FILE).pdf..."
+	@pdflatex "$(FILE).tex"
+
+auto-run:
+	@test -n "$(FILE)" || (echo "Usage: make auto-run FILE=Racket-Guide-To-Geometry" >&2; exit 1)
+	@$(MAKE) clean-all-include-docs FILE="$(FILE)"
+	@$(MAKE) compile-tex FILE="$(FILE)"
+	@$(MAKE) lwarpmk FILE="$(FILE)"
+	@$(MAKE) limages FILE="$(FILE)"
+	@$(MAKE) docs FILE="$(FILE)"
+	@$(MAKE) clean-all-exclude-docs FILE="$(FILE)"
+	@echo "FILE=$(FILE): completed."

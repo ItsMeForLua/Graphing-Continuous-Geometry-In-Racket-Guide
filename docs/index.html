@@ -1,0 +1,852 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+<meta charset="UTF-8" />
+<meta name="generator" content="LaTeX Lwarp package" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Directed Dimensions: Basic and Fundamental Transformations in n-dimensional Space</title>
+<link rel="stylesheet" type="text/css" href="lwarp.css" />
+
+<script>
+// Lwarp MathJax emulation code
+//
+// Based on code by Davide P. Cervone.
+// Equation numbering: https://github.com/mathjax/MathJax/issues/2427
+// Starred and ifnextchar macros: https://github.com/mathjax/MathJax/issues/2428
+// \left, \right delimiters: https://github.com/mathjax/MathJax/issues/2535
+//
+// Modified by Brian Dunn to adjust equation numbering and add subequations.
+//
+// LaTeX can use \seteqnumber{subequations?}{section}{number} before each equation.
+// subequations? is 0 usually, 1 if inside subequations.
+// section is a string printed as-is, or empty.
+// number is auto-incremented by MathJax between equations.
+//
+MathJax = {
+    subequations: "0",
+    section: "",
+    loader: {
+        load: ['[tex]/tagformat', '[tex]/textmacros'],
+    },
+    startup: {
+        ready() {
+            //      These would be replaced by import commands if you wanted to make
+            //      a proper extension.
+            const Configuration = MathJax._.input.tex.Configuration.Configuration;
+            const CommandMap = MathJax._.input.tex.SymbolMap.CommandMap;
+            const Macro = MathJax._.input.tex.Symbol.Macro;
+            const TexError = MathJax._.input.tex.TexError.default;
+            const ParseUtil = MathJax._.input.tex.ParseUtil.default;
+            const expandable = MathJax._.util.Options.expandable;
+
+
+            //      Insert the replacement string into the TeX string, and check
+            //      that there haven't been too many maxro substitutions (prevents
+            //      infinite loops).
+            const useArgument = (parser, text) => {
+                parser.string = ParseUtil.addArgs(parser, text, parser.string.slice(parser.i));
+                parser.i = 0;
+                if (++parser.macroCount > parser.configuration.options.maxMacros) {
+                    throw new TexError('MaxMacroSub1',
+                    'MathJax maximum macro substitution count exceeded; ' +
+                    'is there a recursive macro call?');
+                }
+            }
+
+
+            //      Create the command map for:
+            //          \ifstar, \ifnextchar, \ifblank, \ifstrequal, \gsub, \seteqnumber
+            new CommandMap('Lwarp-macros', {
+                ifstar: 'IfstarFunction',
+                ifnextchar: 'IfnextcharFunction',
+                ifblank: 'IfblankFunction',
+                ifstrequal: 'IfstrequalFunction',
+                gsubstitute: 'GsubstituteFunction',
+                seteqnumber: 'SeteqnumberFunction'
+            }, {
+                //      This function implements an ifstar macro.
+                IfstarFunction(parser, name) {
+                    const resultstar = parser.GetArgument(name);
+                    const resultnostar = parser.GetArgument(name);
+                    const star = parser.GetStar();                      // true if there is a *
+                    useArgument(parser, star ? resultstar : resultnostar);
+                },
+
+
+                //      This function implements an ifnextchar macro.
+                IfnextcharFunction(parser, name) {
+                    let whichchar = parser.GetArgument(name);
+                    if (whichchar.match(/^(?:0x[0-9A-F]+|[0-9]+)$/i)) {
+                        // $ syntax highlighting
+                        whichchar = String.fromCodePoint(parseInt(whichchar));
+                    }
+                    const resultnextchar = parser.GetArgument(name);
+                    const resultnotnextchar = parser.GetArgument(name);
+                    const gotchar = (parser.GetNext() === whichchar);
+                    useArgument(parser, gotchar ? resultnextchar : resultnotnextchar);
+                },
+
+
+                // This function implements an ifblank macro.
+                IfblankFunction(parser, name) {
+                    const blankarg = parser.GetArgument(name);
+                    const resultblank = parser.GetArgument(name);
+                    const resultnotblank = parser.GetArgument(name);
+                    const isblank = (blankarg.trim() == "");
+                    useArgument(parser, isblank ? resultblank : resultnotblank);
+                },
+
+
+                // This function implements an ifstrequal macro.
+                IfstrequalFunction(parser, name) {
+                    const strequalfirst = parser.GetArgument(name);
+                    const strequalsecond = parser.GetArgument(name);
+                    const resultequal = parser.GetArgument(name);
+                    const resultnotequal = parser.GetArgument(name);
+                    const isequal = (strequalfirst == strequalsecond);
+                    useArgument(parser, isequal ? resultequal : resultnotequal);
+                },
+
+
+                // This function implements a gsub macro.
+                GsubstituteFunction(parser, name) {
+                    const gsubfirst = parser.GetArgument(name);
+                    const gsubsecond = parser.GetArgument(name);
+                    const gsubthird = parser.GetArgument(name);
+                    let gsubresult=gsubfirst.replace(gsubsecond, gsubthird);
+                    useArgument(parser, gsubresult);
+                },
+
+
+                //      This function modifies the equation numbers.
+                SeteqnumberFunction(parser, name) {
+                        //   Get the macro parameters
+                        const star = parser.GetStar();                    // true if there is a *
+                        const optBrackets = parser.GetBrackets(name);     // contents of optional brackets
+                        const newsubequations = parser.GetArgument(name);    // the subequations argument
+                        const neweqsection = parser.GetArgument(name);    // the eq section argument
+                        const neweqnumber = parser.GetArgument(name);     // the eq number argument
+                        MathJax.config.subequations=newsubequations ;     // a string with boolean meaning
+                        MathJax.config.section=neweqsection ;             // a string with numeric meaning
+                        parser.tags.counter = parser.tags.allCounter = neweqnumber ;
+                }
+
+
+            });
+
+
+            //      Create the Lwarp-macros package
+            Configuration.create('Lwarp-macros', {
+                handler: {macro: ['Lwarp-macros']}
+            });
+
+
+            MathJax.startup.defaultReady();
+
+
+            // For forward references:
+            MathJax.startup.input[0].preFilters.add(({math}) => {
+                if (math.inputData.recompile){
+                        MathJax.config.subequations = math.inputData.recompile.subequations;
+                        MathJax.config.section = math.inputData.recompile.section;
+                }
+            });
+            MathJax.startup.input[0].postFilters.add(({math}) => {
+                if (math.inputData.recompile){
+                        math.inputData.recompile.subequations = MathJax.config.subequations;
+                        math.inputData.recompile.section = MathJax.config.section;
+                }
+            });
+
+
+                // For \left, \right with unicode-math:
+                const {DelimiterMap} = MathJax._.input.tex.SymbolMap;
+                const {Symbol} = MathJax._.input.tex.Symbol;
+                const {MapHandler} = MathJax._.input.tex.MapHandler;
+                const delimiter = MapHandler.getMap('delimiter');
+                delimiter.add('\\lBrack', new Symbol('\\lBrack', '\u27E6'));
+                delimiter.add('\\rBrack', new Symbol('\\rBrack', '\u27E7'));
+                delimiter.add('\\lAngle', new Symbol('\\lAngle', '\u27EA'));
+                delimiter.add('\\rAngle', new Symbol('\\rAngle', '\u27EB'));
+                delimiter.add('\\lbrbrak', new Symbol('\\lbrbrak', '\u2772'));
+                delimiter.add('\\rbrbrak', new Symbol('\\rbrbrak', '\u2773'));
+                delimiter.add('\\lbag', new Symbol('\\lbag', '\u27C5'));
+                delimiter.add('\\rbag', new Symbol('\\rbag', '\u27C6'));
+                delimiter.add('\\llparenthesis', new Symbol('\\llparenthesis', '\u2987'));
+                delimiter.add('\\rrparenthesis', new Symbol('\\rrparenthesis', '\u2988'));
+                delimiter.add('\\llangle', new Symbol('\\llangle', '\u2989'));
+                delimiter.add('\\rrangle', new Symbol('\\rrangle', '\u298A'));
+                delimiter.add('\\Lbrbrak', new Symbol('\\Lbrbrak', '\u27EC'));
+                delimiter.add('\\Rbrbrak', new Symbol('\\Rbrbrak', '\u27ED'));
+                delimiter.add('\\lBrace', new Symbol('\\lBrace', '\u2983'));
+                delimiter.add('\\rBrace', new Symbol('\\rBrace', '\u2984'));
+                delimiter.add('\\lParen', new Symbol('\\lParen', '\u2985'));
+                delimiter.add('\\rParen', new Symbol('\\rParen', '\u2986'));
+                delimiter.add('\\lbrackubar', new Symbol('\\lbrackubar', '\u298B'));
+                delimiter.add('\\rbrackubar', new Symbol('\\rbrackubar', '\u298C'));
+                delimiter.add('\\lbrackultick', new Symbol('\\lbrackultick', '\u298D'));
+                delimiter.add('\\rbracklrtick', new Symbol('\\rbracklrtick', '\u298E'));
+                delimiter.add('\\lbracklltick', new Symbol('\\lbracklltick', '\u298F'));
+                delimiter.add('\\rbrackurtick', new Symbol('\\rbrackurtick', '\u2990'));
+                delimiter.add('\\langledot', new Symbol('\\langledot', '\u2991'));
+                delimiter.add('\\rangledot', new Symbol('\\rangledot', '\u2992'));
+                delimiter.add('\\lparenless', new Symbol('\\lparenless', '\u2993'));
+                delimiter.add('\\rparengtr', new Symbol('\\rparengtr', '\u2994'));
+                delimiter.add('\\Lparengtr', new Symbol('\\Lparengtr', '\u2995'));
+                delimiter.add('\\Rparenless', new Symbol('\\Rparenless', '\u2996'));
+                delimiter.add('\\lblkbrbrak', new Symbol('\\lblkbrbrak', '\u2997'));
+                delimiter.add('\\rblkbrbrak', new Symbol('\\rblkbrbrak', '\u2998'));
+                delimiter.add('\\lvzigzag', new Symbol('\\lvzigzag', '\u29D8'));
+                delimiter.add('\\rvzigzag', new Symbol('\\rvzigzag', '\u29D9'));
+                delimiter.add('\\Lvzigzag', new Symbol('\\Lvzigzag', '\u29DA'));
+                delimiter.add('\\Rvzigzag', new Symbol('\\Rvzigzag', '\u29DB'));
+                delimiter.add('\\lcurvyangle', new Symbol('\\lcurvyangle', '\u29FC'));
+                delimiter.add('\\rcurvyangle', new Symbol('\\rcurvyangle', '\u29FD'));
+                delimiter.add('\\Vvert', new Symbol('\\Vvert', '\u2980'));
+        }        // ready
+    },          // startup
+
+
+    tex: {
+        packages: {'[+]': ['tagformat', 'Lwarp-macros', 'textmacros']},
+        tags: "ams",
+                tagformat: {
+                        number: function (n) {
+                             if(MathJax.config.subequations==0)
+                                 return(MathJax.config.section + n);
+                             else
+                                 return(MathJax.config.section + String.fromCharCode(96+n));
+                        },
+                },
+    }
+}
+</script>
+
+
+<script
+        id="MathJax-script"
+        src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"
+></script>
+
+</head>
+<body>
+
+
+<div class="homepagegrid">
+
+
+<main class="bodycontainer">
+
+
+<section class="textbody">
+
+<a id="Racket-Guide-To-Geometry-autofile-0"></a>
+
+<!--MathJax customizations:-->
+<div data-nosnippet
+    style="display:none"
+>
+
+\(\newcommand{\footnotename}{footnote}\)
+
+\(\def \LWRfootnote {1}\)
+
+\(\newcommand {\footnote }[2][\LWRfootnote ]{{}^{\mathrm {#1}}}\)
+
+\(\newcommand {\footnotemark }[1][\LWRfootnote ]{{}^{\mathrm {#1}}}\)
+
+\(\let \LWRorighspace \hspace \)
+
+\(\renewcommand {\hspace }{\ifstar \LWRorighspace \LWRorighspace }\)
+
+\(\newcommand {\TextOrMath }[2]{#2}\)
+
+\(\newcommand {\mathnormal }[1]{{#1}}\)
+
+\(\newcommand \ensuremath [1]{#1}\)
+
+\(\newcommand {\LWRframebox }[2][]{\fbox {#2}} \newcommand {\framebox }[1][]{\LWRframebox } \)
+
+\(\newcommand {\setlength }[2]{}\)
+
+\(\newcommand {\addtolength }[2]{}\)
+
+\(\newcommand {\setcounter }[2]{}\)
+
+\(\newcommand {\addtocounter }[2]{}\)
+
+\(\newcommand {\arabic }[1]{}\)
+
+\(\newcommand {\number }[1]{}\)
+
+\(\newcommand {\noalign }[1]{\text {#1}\notag \\}\)
+
+\(\newcommand {\cline }[1]{}\)
+
+\(\newcommand {\directlua }[1]{\text {(directlua)}}\)
+
+\(\newcommand {\luatexdirectlua }[1]{\text {(directlua)}}\)
+
+\(\newcommand {\protect }{}\)
+
+\(\def \LWRabsorbnumber #1 {}\)
+
+\(\def \LWRabsorbquotenumber &quot;#1 {}\)
+
+\(\newcommand {\LWRabsorboption }[1][]{}\)
+
+\(\newcommand {\LWRabsorbtwooptions }[1][]{\LWRabsorboption }\)
+
+\(\def \mathchar {\ifnextchar &quot;\LWRabsorbquotenumber \LWRabsorbnumber }\)
+
+\(\def \mathcode #1={\mathchar }\)
+
+\(\let \delcode \mathcode \)
+
+\(\let \delimiter \mathchar \)
+
+\(\def \oe {\unicode {x0153}}\)
+
+\(\def \OE {\unicode {x0152}}\)
+
+\(\def \ae {\unicode {x00E6}}\)
+
+\(\def \AE {\unicode {x00C6}}\)
+
+\(\def \aa {\unicode {x00E5}}\)
+
+\(\def \AA {\unicode {x00C5}}\)
+
+\(\def \o {\unicode {x00F8}}\)
+
+\(\def \O {\unicode {x00D8}}\)
+
+\(\def \l {\unicode {x0142}}\)
+
+\(\def \L {\unicode {x0141}}\)
+
+\(\def \ss {\unicode {x00DF}}\)
+
+\(\def \SS {\unicode {x1E9E}}\)
+
+\(\def \dag {\unicode {x2020}}\)
+
+\(\def \ddag {\unicode {x2021}}\)
+
+\(\def \P {\unicode {x00B6}}\)
+
+\(\def \copyright {\unicode {x00A9}}\)
+
+\(\def \pounds {\unicode {x00A3}}\)
+
+\(\let \LWRref \ref \)
+
+\(\renewcommand {\ref }{\ifstar \LWRref \LWRref }\)
+
+\( \newcommand {\multicolumn }[3]{#3}\)
+
+\(\require {textcomp}\)
+
+\(\newcommand {\intertext }[1]{\text {#1}\notag \\}\)
+
+\(\let \Hat \hat \)
+
+\(\let \Check \check \)
+
+\(\let \Tilde \tilde \)
+
+\(\let \Acute \acute \)
+
+\(\let \Grave \grave \)
+
+\(\let \Dot \dot \)
+
+\(\let \Ddot \ddot \)
+
+\(\let \Breve \breve \)
+
+\(\let \Bar \bar \)
+
+\(\let \Vec \vec \)
+
+\(\require {mathtools}\)
+
+\(\newcommand {\vcentcolon }{\mathrel {\unicode {x2236}}}\)
+
+\(\newcommand {\approxcolon }{\approx \vcentcolon }\)
+
+\(\newcommand {\Approxcolon }{\approx \dblcolon }\)
+
+\(\newcommand {\simcolon }{\sim \vcentcolon }\)
+
+\(\newcommand {\Simcolon }{\sim \dblcolon }\)
+
+\(\newcommand {\dashcolon }{\mathrel {-}\vcentcolon }\)
+
+\(\newcommand {\Dashcolon }{\mathrel {-}\dblcolon }\)
+
+\(\newcommand {\colondash }{\vcentcolon \mathrel {-}}\)
+
+\(\newcommand {\Colondash }{\dblcolon \mathrel {-}}\)
+
+\(\newenvironment {crampedsubarray}[1]{}{}\)
+
+\(\newcommand {\smashoperator }[2][]{#2\limits }\)
+
+\(\newcommand {\SwapAboveDisplaySkip }{}\)
+
+\(\newcommand {\LaTeXunderbrace }[1]{\underbrace {#1}}\)
+
+\(\newcommand {\LaTeXoverbrace }[1]{\overbrace {#1}}\)
+
+\(\Newextarrow \xLongleftarrow {10,10}{0x21D0}\)
+
+\(\Newextarrow \xLongrightarrow {10,10}{0x21D2}\)
+
+\(\let \xlongleftarrow \xleftarrow \)
+
+\(\let \xlongrightarrow \xrightarrow \)
+
+\(\newcommand {\LWRmultlined }[1][]{\begin {multline*}}\)
+
+\(\newenvironment {multlined}[1][]{\LWRmultlined }{\end {multline*}}\)
+
+\(\let \LWRorigshoveleft \shoveleft \)
+
+\(\renewcommand {\shoveleft }[1][]{\LWRorigshoveleft }\)
+
+\(\let \LWRorigshoveright \shoveright \)
+
+\(\renewcommand {\shoveright }[1][]{\LWRorigshoveright }\)
+
+\(\newcommand {\shortintertext }[1]{\text {#1}\notag \\}\)
+
+\(\newcommand{\normLWRsubstar}[2][]{{#1\left \lVert #2#1\right \rVert }}\)
+
+\(\newcommand{\normLWRsubnostar}[2][]{{#1\lVert #2#1\rVert }}\)
+
+\(\newcommand{\norm}{\ifstar\normLWRsubstar\normLWRsubnostar}\)
+
+\(\DeclarePairedDelimiter {\norm }{\lVert }{\rVert }\)
+
+\(\newcommand {\vecnorm }[1]{\norm *{\vec {#1}}}\)
+
+\(\newcommand {\vechat }[1]{\norm *{\hat {#1}}}\)
+
+</div>
+
+<a id="Racket-Guide-To-Geometry-autopage-1"></a>
+<div class="titlepage">
+
+<h1>Directed Dimensions: Basic and Fundamental Transformations in n-dimensional Space</h1>
+
+
+<div class="author">
+
+
+<div class="oneauthor">
+
+<p>
+Andrew D. France
+</p>
+</div>
+
+</div>
+
+
+<div class="titledate">
+
+<p>
+May 2, 2026
+</p>
+</div>
+
+</div>
+<!--
+...... section Contents ......
+-->
+<h4 id="autosec-3">Contents</h4>
+<a id="Racket-Guide-To-Geometry-autopage-3"></a>
+
+
+
+<nav class="toc">
+
+<p>
+<a href="Racket-Guide-To-Geometry.html#autosec-4" class="tocsection" >
+<span class="sectionnumber">1</span>&#x2003;Circles and Transformations</a>
+</p>
+
+
+<p>
+<a href="Racket-Guide-To-Geometry.html#autosec-6" class="tocsubsection" >
+<span class="sectionnumber">1.1</span>&#x2003;Parametric Transformation of Representation</a>
+</p>
+
+
+<p>
+<a href="Racket-Guide-To-Geometry.html#autosec-8" class="tocsubsubsection" >
+<span class="sectionnumber">1.1.1</span>&#x2003;Parametric Form as Dot Product</a>
+</p>
+</nav>
+<!--
+...... section Circles and Transformations ......
+-->
+<h4 id="autosec-4"><span class="sectionnumber">1&#x2003;</span>Circles and Transformations</h4>
+<a id="Racket-Guide-To-Geometry-autopage-4"></a>
+
+
+<p>
+A circle can be defined in a few ways, but we will simply define its basic identity in terms of its standard equation:
+</p>
+
+<span class="hidden"> \(\seteqnumber{0}{}{0}\)</span>
+
+<!--
+
+
+                                                                                                                x2 + y 2 = r 2
+
+-->
+
+<p>
+
+\begin{equation*}
+x^2 + y^2 = r^2
+\end{equation*}
+
+</p>
+
+<p>
+The variables in a circle’s standard equation are squared because it directly comes from the Pythagorean Theorem. Truly, when we say a circle is defined in terms of its standard equation, we mean that it is defined as all points
+\((x,y)\) that are exactly a magnitude of \(r\) from the centre.<sup>1</sup>And the magnitude from the centre to any point \((x,y)\) is:
+</p>
+
+<span class="hidden"> \(\seteqnumber{0}{}{0}\)</span>
+
+<!--
+
+                                                                                                                       p
+                                                                                                              ∥⃗u∥ =    x2 + y 2
+
+-->
+
+<p>
+
+\begin{equation*}
+\vecnorm {u}=\sqrt {x^{2}+y^{2}}
+\end{equation*}
+
+</p>
+
+<p>
+This explains the definition of a circle, but now let us present a predicament in which we are given the equation \(x^2 + y^2 = 4\), and are tasked with plotting our circle in <i>Racket</i>. One might be tempted to simply set
+the radius to 4; however, the true radius of this circle is 2. One may wonder how we arrived at this value–do the exponents of \(x\) and \(y\) denote the radius of the circle, or did we take the square root? Remember that we
+established the radius \(r\) is equal to the magnitude:
+</p>
+
+<span class="hidden"> \(\seteqnumber{0}{}{0}\)</span>
+
+<!--
+
+                                                                                                                         p
+                                                                                                           r = ∥⃗u∥ =        x2 + y 2
+
+-->
+
+<p>
+
+\begin{equation*}
+r = \vecnorm {u} = \sqrt {x^{2}+y^{2}}
+\end{equation*}
+
+</p>
+
+<p>
+It is standard convention to square both sides of this equation for simplicity, which then yields the standard equation of a circle we introduced earlier:
+</p>
+
+<span class="hidden"> \(\seteqnumber{0}{}{0}\)</span>
+
+<!--
+
+
+                                                                                                                r2 = x2 + y 2
+
+-->
+
+<p>
+
+\begin{equation*}
+r^2 = x^{2}+y^{2}
+\end{equation*}
+
+</p>
+
+<p>
+Withal, by transitivity of equality if \(x^2 + y^2 = r^2\) and \(x^2 + y^2 = 4\) then:<sup>2</sup>
+</p>
+
+<span class="hidden"> \(\seteqnumber{0}{}{0}\)</span>
+
+<!--
+
+
+                                                                                                                    r2 = 4
+
+-->
+
+<p>
+
+\begin{equation*}
+r^2 = 4
+\end{equation*}
+
+</p>
+
+<p>
+Therefore, to find the true value of \(r\) , we take the square root of both sides:
+</p>
+
+<span class="hidden"> \(\seteqnumber{0}{}{0}\)</span>
+
+<!--
+
+
+                                                                                                              p                √
+                                                                                                                  x2 + y 2 =       4
+                                                                                                              p
+                                                                                                                  x2 + y 2 = 2
+
+-->
+
+<p>
+
+\begin{equation*}
+\begin{split} &amp;\sqrt {x^2 + y^2} = \sqrt {4} \\ &amp;\sqrt {x^{2}+y^{2}}=2 \end {split}
+\end{equation*}
+
+</p>
+
+<p>
+What we can now conclude is that the equation \(x^{2}+y^{2}=4\) is simply a consequence of the Pythagorean theorem, but the magnitude \(r\) of our circle is the scalar value of 2.
+</p>
+<div role="note" class="footnotes">
+
+<a id="Racket-Guide-To-Geometry-autopage-5"></a>
+<p>
+<span
+     class="makebox"
+     style="display:inline-block ; width:23pt ; text-align:right ; "
+>1.&#x202f;&#x202f;</span>It is common procedure to refer to magnitude instead as distance. However, it is more ontologically precise to explicitly name magnitude as the substance we are working with, because distance is an
+abstract measurement that exists only contextually rather than distinctly.
+</p>
+
+<p>
+<span
+     class="makebox"
+     style="display:inline-block ; width:23pt ; text-align:right ; "
+>2.&#x202f;&#x202f;</span>Transitivity of equality is a fundamental axiom in math and logic, which states that if a quantity is equal to a second quantity, and that second quantity is equal to a third, then the first and third
+quantities are equal to eachother: \(\text {if } a=b \text { and } b=c, \text { then } a=c\).
+</p>
+
+
+</div>
+<!--
+...... subsection Parametric Transformation of Representation ......
+-->
+<h5 id="autosec-6"><span class="sectionnumber">1.1&#x2003;</span>Parametric Transformation of Representation</h5>
+<a id="Racket-Guide-To-Geometry-autopage-6"></a>
+
+
+<p>
+Visualizing a circle expressed in standard form through computational means is best done by converting its standard form to parametric form.<sup>3</sup>A transformation of a circle’s standard form to parametric form can be
+considered a syntactic transformation–excluding it from what we would call topological transformations.<sup>4</sup>Formally, the conversion of implicit form to explicit form is known as an algebraic change.
+</p>
+
+<p>
+Converting the implicit form \(x^{2}+y^{2}=r^{2}\) to explicit form is first done by equivalent substitution of \((x,y)\) to:
+</p>
+
+<span class="hidden"> \(\seteqnumber{0}{}{0}\)</span>
+
+<!--
+
+
+
+                                                                                                        x = r cos(t)
+                                                                                                        y = r sin(t)
+                                                                                                        Such that t ∈ [0, 2π]
+
+-->
+
+<p>
+
+\begin{equation*}
+\begin{split} &amp;x = r\cos (t) \\ &amp;y = r\sin (t) \\ &amp;\text {Such that }t \in [0, 2\pi ] \end {split}
+\end{equation*}
+
+</p>
+
+<p>
+Since we already established that \(r=2\), we can finally write our explicit functions:
+</p>
+
+<span class="hidden"> \(\seteqnumber{0}{}{0}\)</span>
+
+<!--
+
+
+
+                                                                                                      x = 2 cos(t), y = 2 sin(t)
+                                                                                                      t ∈ [0, 2π]
+
+-->
+
+<p>
+
+\begin{equation*}
+\begin{split} &amp;x = 2\cos (t), y = 2\sin (t) \\ &amp;t \in [0, 2\pi ] \end {split}
+\end{equation*}
+
+</p>
+
+<p>
+You might notice that our conversion is done in terms of the parameter \([0,2\pi ]\). One might wonder “Isn’t a unit circle also restricted to \([0,2\pi ]\)–is this related somehow?” The answer is that the parametric form is
+the unit circle–stretched by a scalar value, which in our case is 2. It may be useful here to acknowledge that a vector is composed of magnitude \(\vecnorm {u}\) (how far) and direction \(\vechat {u}\) (which way). Before we
+converted our implicit equation into parametric form, we only knew our magnitude \(r=\vecnorm {u}\). Now that we have the parametric form of our equation, we know our unit circle coordinates \((\cos (t), \sin (t))\)–and
+this provides us with our circular direction \(\vechat {u}\).
+</p>
+
+<p>
+We previously only acknowledged an algebraic change of implicit to explicit, but we can now acknowledge the subsequent stretching of the unit circle by magnitude of 2 as a scaling transformation. This is because when we changed
+to a parametric equation, we took our circular direction and scaled it outward by our specific magnitude, \(r\) .
+</p>
+<div role="note" class="footnotes">
+
+<a id="Racket-Guide-To-Geometry-autopage-7"></a>
+<p>
+<span
+     class="makebox"
+     style="display:inline-block ; width:23pt ; text-align:right ; "
+>3.&#x202f;&#x202f;</span>A standard equation in geometry is known as an implicit equation, because it does not tell you exactly what y is, and thus, it is not a true function. Parametric form is what we call an explicit
+equation because it explicitly defines what the value of y is. It is possible to graph an implicit equation, but the lines are likely to be jagged and would require compensation of slopes.
+</p>
+
+<p>
+<span
+     class="makebox"
+     style="display:inline-block ; width:23pt ; text-align:right ; "
+>4.&#x202f;&#x202f;</span>The word <i>syntax</i> comes from koin Greek word <i>suntáxein</i> (συντάσσειν), which was specifically developed as reference to the grammatical order of words. Though, the english term we
+use is partly borrowed from the Latin <i>syntaxis</i> which itself was developed from Greek. Oxford University Press. doi:10.1093/OED/1603449563
+</p>
+
+
+</div>
+<!--
+...... subsubsection Parametric Form as Dot Product ......
+-->
+<h6 id="autosec-8"><span class="sectionnumber">1.1.1&#x2003;</span>Parametric Form as Dot Product</h6>
+<a id="Racket-Guide-To-Geometry-autopage-8"></a>
+
+
+<p>
+We must distinguish between the algebraic definition of the dot product, and the geometric definition of the dot product. The algebraic definition of a dot product is:
+</p>
+
+<span class="hidden"> \(\seteqnumber{0}{}{0}\)</span>
+
+<!--
+
+
+                                                                                                              ⃗u · ⃗v = ux vx + uy vy
+
+-->
+
+<p>
+
+\begin{equation*}
+\vec {u} \cdot \vec {v} = u_x v_x + u_y v_y
+\end{equation*}
+
+</p>
+
+<p>
+This definition does not account for angles or shapes; hence, all it does is multiply and add lists of numbers. You would use this definition if you only knew the raw coordinates of two vectors \(\vec {u} = (u_x, u_y)\) and
+\(\vec {v} = (v_x, v_y)\). But what if we are handling geometric relationships? In that case, we would use the geometric definition of the dot product:
+</p>
+
+<span class="hidden"> \(\seteqnumber{0}{}{0}\)</span>
+
+<!--
+
+
+
+                                                                                                ⃗u · ⃗v = ||⃗u||||⃗v || cos(θ)
+                                                                                                Such that θ is the angle between them.
+
+-->
+
+<p>
+
+\begin{equation*}
+\begin{split} &amp;\vec {u} \cdot \vec {v} = ||\vec {u}|| ||\vec {v}|| \cos (\theta ) \\ &amp;\text {Such that } \theta \text { is the angle between them.} \end {split}
+\end{equation*}
+
+</p>
+<!--
+...... subsubsection Parametric Form in Lambda Calculus ......
+-->
+<h6 id="autosec-9">Parametric Form in Lambda Calculus</h6>
+<a id="Racket-Guide-To-Geometry-autopage-9"></a>
+
+
+<p>
+In pure lambda calculus, we do not have pairs; instead, what we use are church pairs. A church pair is a function which itself takes another function and applies it to our two values. <i>Racket</i>uses what is called prefix notation.
+Prefix notation is a model of evaluation which evaluates a combination (+ 1 2), by applying the left most operator (+) and applies it to the operands (1 2). It is natural to assume that a church pair is equivalent to prefix evaluation.
+However, in the universe of lambda calculus, data does not exist; rather, we have functions. Data is something which can be considered inactive, while a Church pair is an active function that possesses your two values. And the only
+way for an operator to be applied on those values in our Church pair, is if given the operator by another function.
+</p>
+
+<p>
+When given the equation \(x^2 = 4y + 8\), you start by doing smaller algebra:
+</p>
+
+<span class="hidden"> \(\seteqnumber{0}{}{0}\)</span>
+
+<!--
+
+
+
+                                                                                   The goal here is to force an explicit equation by isolating y and x.
+                                                                                   x2 = 4y + 8 −→ x2 − 8 = 4y
+                                                                                    x2   8 4y
+                                                                                       − =
+                                                                                     4   4  4
+                                                                                    1 2
+                                                                                      x −2=y
+                                                                                    4
+
+-->
+
+<p>
+
+\begin{equation*}
+\begin{split} &amp;\text {The goal here is to force an explicit equation by isolating y and x.} \\ &amp;x^2 = 4y + 8 \longrightarrow x^{2}-8 = 4y \\ &amp;\frac {x^2}{4} -\frac {8}{4} = \frac
+{4y}{4} \\ &amp;\frac {1}{4}x^{2} -2 = y \end {split}
+\end{equation*}
+
+</p>
+
+<p>
+The form \(y = ax^2 + bx + c\) is the most basic equation of a parabola.
+</p>
+
+<a id="Racket-Guide-To-Geometry-autofile-last"></a>
+</section>
+
+</main>
+
+</div><!-- grid -->
+</body>
+</html>
