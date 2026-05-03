@@ -1,7 +1,7 @@
 #lang racket
 (require plot)
 
-;polar expects a function θ → r, not a sum of x/y terms — polar coords don't work directly for this equation
+;polar expects a function θ → r, not a sum of x/y terms. Polar coords don't work directly for this equation
 ; Circle
 #|
 (plot (parametric

@@ -1,0 +1,179 @@
+\documentclass[12pt, letterpaper]{article}
+
+% --- Page Layout ---
+\usepackage[margin=1in]{geometry}
+\usepackage{setspace}
+\doublespacing
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{csquotes}
+\usepackage{textalpha}
+\usepackage{alphabeta}
+
+\DeclareUnicodeCharacter{2227}{\ensuremath{\wedge}}
+\DeclareUnicodeCharacter{00AC}{\ensuremath{\neg}}
+\DeclareUnicodeCharacter{2192}{\ensuremath{\rightarrow}}
+\usepackage{amsmath, amssymb, graphicx}
+\usepackage{textcomp}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{tikz}
+\usepackage[disable]{todonotes}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{tikz-3dplot}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usetikzlibrary{calc, positioning}
+\usetikzlibrary{decorations.pathreplacing}
+\usepackage[font=small]{caption}
+\usepackage{mathtools}
+\usepackage{comment}
+
+\usepackage[notes,backend=biber]{biblatex-chicago} 
+\addbibresource{references.bib}
+
+\usepackage[colorlinks=true, linkcolor=blue, citecolor=blue, urlcolor=blue]{hyperref}
+
+\DeclareRobustCommand{\code}[1]{%
+	\begingroup
+	\setlength{\fboxsep}{2pt}%
+	\colorbox{gray!15}{\ttfamily\small #1}%
+	\endgroup
+}
+\widowpenalty=10000
+\clubpenalty=10000
+\lstset{
+	language=Lisp,
+	basicstyle=\ttfamily\small\linespread{1}\selectfont\raggedright,
+	morekeywords={define, struct, hash, lambda, for/fold, hash-update},
+	columns=fullflexible,
+	keepspaces=true,
+	upquote=true,
+	keywordstyle=\color{blue}\bfseries,
+	commentstyle=\color{green!60!black}\itshape,
+	stringstyle=\color{red},
+	breaklines=true,
+	frame=single,
+	backgroundcolor=\color{gray!10},
+	showstringspaces=false,
+	aboveskip=1.5em,
+	belowskip=1.5em,
+	xleftmargin=0pt
+}
+
+\newcommand{\iRac}{\textit{Racket}}
+\newcommand{\Lr}{\(r\) }
+\newcommand{\xy}{\((x,y)\) }
+
+\usepackage{FootnotesMacros}
+
+\title{Directed Dimensions: Basic and Fundamental Transformations in n-dimensional Space}
+\author{Andrew D. France}
+\date{\today}
+
+\begin{document}
+	
+	\maketitle
+	\newpage
+	
+	\tableofcontents
+	\newpage
+
+	\section{Circles and Transformations}
+	A circle can be defined in a few ways, but we will simply define its basic identity in terms of its standard equation:
+	\begin{equation*}
+		x^2 + y^2 = r^2
+	\end{equation*}
+	The variables in a circle's standard equation are squared because it directly comes from the Pythagorean Theorem. Truly, when we say a circle is defined in terms of its standard equation, we mean that it is defined as all points \xy that are exactly a magnitude of \Lr from the centre.\ftA And the magnitude from the centre to any point \xy is:
+	\begin{equation*}
+		\vecnorm{u}=\sqrt{x^{2}+y^{2}}
+	\end{equation*}
+	This explains the definition of a circle, but now let us present a predicament in which we are given the equation \(x^2 + y^2 = 4\), and are tasked with plotting our circle in \iRac. One might be tempted to simply set the radius to 4; however, the true radius of this circle is 2. One may wonder how we arrived at this value--do the exponents of \(x\) and \(y\) denote the radius of the circle, or did we take the square root? Remember that we established the radius \Lr is equal to the magnitude:
+	\begin{equation*}
+		r = \vecnorm{u} = \sqrt{x^{2}+y^{2}}
+	\end{equation*}
+	It is standard convention to square both sides of this equation for simplicity, which then yields the standard equation of a circle we introduced earlier:
+	\begin{equation*}
+		r^2 = x^{2}+y^{2}
+	\end{equation*}
+	Withal, by transitivity of equality if \(x^2 + y^2 = r^2\) and \(x^2 + y^2 = 4\) then:\ftC
+	\begin{equation*}
+		r^2 = 4
+	\end{equation*}
+	Therefore, to find the true value of \Lr, we take the square root of both sides:
+	\begin{equation*}
+		\begin{split}
+			&\sqrt{x^2 + y^2} = \sqrt{4} \\
+			&\sqrt{x^{2}+y^{2}}=2
+		\end{split}
+	\end{equation*}
+	What we can now conclude is that the equation \(x^{2}+y^{2}=4\) is simply a consequence of the Pythagorean theorem, but the magnitude \Lr of our circle is the scalar value of 2.
+	
+	\subsection{Parametric Transformation of Representation}
+	Visualizing a circle expressed in standard form through computational means is best done by converting its standard form to parametric form.\ftB A transformation of a circle's standard form to parametric form can be considered a syntactic transformation--excluding it from what we would call topological transformations.\ftD Formally, the conversion of implicit form to explicit form is known as an algebraic change.
+	
+	Converting the implicit form \(x^{2}+y^{2}=r^{2}\) to explicit form is first done by equivalent substitution of \xy to:
+	\begin{equation*}
+		\begin{split}
+			&x = r\cos(t) \\
+			&y = r\sin(t) \\
+			&\text{Such that }t \in [0, 2\pi]
+		\end{split}
+	\end{equation*}
+	
+	Since we already established that \(r=2\), we can finally write our explicit functions:
+	\begin{equation*}
+		\begin{split}
+			&x = 2\cos(t), y = 2\sin(t) \\
+			&t \in [0, 2\pi]
+		\end{split}
+	\end{equation*}
+	
+	You might notice that our conversion is done in terms of the parameter \([0,2\pi]\). One might wonder ``Isn't a unit circle also restricted to \([0,2\pi]\)--is this related somehow?'' The answer is that the parametric form is the unit circle--stretched by a scalar value, which in our case is 2. It may be useful here to acknowledge that a vector is composed of magnitude \(\vecnorm{u}\) (how far) and direction \(\vechat{u}\) (which way). Before we converted our implicit equation into parametric form, we only knew our magnitude \(r=\vecnorm{u}\). Now that we have the parametric form of our equation, we know our unit circle coordinates \((\cos(t), \sin(t))\)--and this provides us with our circular direction \(\vechat{u}\).
+	% In this case, our direction is one dimensional, because a circle does not contain anything necessarily.
+	
+	We previously only acknowledged an algebraic change of implicit to explicit, but we can now acknowledge the subsequent stretching of the unit circle by magnitude of 2 as a scaling transformation. This is because when we changed to a parametric equation, we took our circular direction and scaled it outward by our specific magnitude, \Lr.
+	\subsubsection{Parametric Form as Dot Product}
+	We must distinguish between the algebraic definition of the dot product, and the geometric definition of the dot product.
+	The algebraic definition of a dot product is:
+	\begin{equation*}
+		\vec{u} \cdot \vec{v} = u_x v_x + u_y v_y
+	\end{equation*}
+	This definition does not account for angles or shapes; hence, all it does is multiply and add lists of numbers. You would use this definition if you only knew the raw coordinates of two vectors \(\vec{u} = (u_x, u_y)\) and \(\vec{v} = (v_x, v_y)\). But what if we are handling geometric relationships? In that case, we would use the geometric definition of the dot product:
+	\begin{equation*}
+		\begin{split}
+		&\vec{u} \cdot \vec{v} = ||\vec{u}|| ||\vec{v}|| \cos(\theta) \\
+		&\text{Such that } \theta \text{ is the angle between them.}
+		\end{split}
+	\end{equation*}
+	
+	\subsubsection*{Parametric Form in Lambda Calculus}
+	In pure lambda calculus, we do not have pairs; instead, what we use are church pairs. A church pair is a function which itself takes another function and applies it to our two values. \iRac uses what is called prefix notation. Prefix notation is a model of evaluation which evaluates a combination (+ 1 2), by applying the left most operator (+) and applies it to the operands (1 2). It is natural to assume that a church pair is equivalent to prefix evaluation. However, in the universe of lambda calculus, data does not exist; rather, we have functions.
+	Data is something which can be considered inactive, while a Church pair is an active function that possesses your two values. And the only way for an operator to be applied on those values in our Church pair, is if given the operator by another function.
+	
+
+
+\begin{comment}
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=0.4\textwidth]{para_circle.png}
+		\caption{}
+		\label{fig:overlap}
+	\end{figure}
+\end{comment}
+	
+	When given the equation \(x^2 = 4y + 8\), you start by doing smaller algebra:
+	\begin{equation*}
+	\begin{split}
+		&\text{The goal here is to force an explicit equation by isolating y and x.} \\
+		&x^2 = 4y + 8 \longrightarrow x^{2}-8 = 4y \\
+		&\frac{x^2}{4} -\frac{8}{4} = \frac{4y}{4} \\
+		&\frac{1}{4}x^{2} -2 = y
+	\end{split}
+	\end{equation*}
+	The form \(y = ax^2 + bx + c\) is the most basic equation of a parabola.
+	
+\end{document}

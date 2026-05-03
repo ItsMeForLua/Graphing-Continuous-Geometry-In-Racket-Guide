@@ -1,0 +1,17 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{FootnotesMacros}[2026/05/02 v1.0 Provides my macros for pre-defined footnotes]
+
+\DeclarePairedDelimiter{\norm}{\lVert}{\rVert}
+\newcommand{\vecnorm}[1]{\norm*{\vec{#1}}}
+\newcommand{\vechat}[1]{\norm*{\hat{#1}}}
+
+\newcommand{\ftA}{\footnote{It is common procedure to refer to magnitude instead as distance. However, it is more ontologically precise to explicitly name magnitude as the substance we are working with, because distance is an abstract measurement that exists only contextually rather than distinctly.}}
+
+\newcommand{\ftB}{\footnote{A standard equation in geometry is known as an implicit equation, because it does not tell you exactly what y is, and thus, it is not a true function. Parametric form is what we call an explicit equation because it explicitly defines what the value of y is. It is possible to graph an implicit equation, but the lines are likely to be jagged and would require compensation of slopes.}}
+
+\newcommand{\ftC}{\footnote{Transitivity of equality is a fundamental axiom in math and logic, which states that if a quantity is equal to a second quantity, and that second quantity is equal to a third, then the first and third quantities are equal to eachother: \(\text{if } a=b \text{ and } b=c, \text{ then } a=c\).}}
+
+\newcommand{\ftD}{\footnote{The word \textit{syntax} comes from koin Greek word \textit{suntáxein} (συντάσσειν), which was specifically developed as reference to the grammatical order of words. Though, the english term we use is partly borrowed from the Latin \textit{syntaxis} which itself was developed from Greek. Oxford University Press. doi:10.1093/OED/1603449563}}
+		
+
+\endinput
