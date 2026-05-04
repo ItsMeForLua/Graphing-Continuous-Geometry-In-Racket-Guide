@@ -2,7 +2,27 @@ PYTHON ?= python
 VENV_DIR := .venv
 PROCESS_DIR := ../ProcessProse
 
-.PHONY: venv install-pylibs style-check clean-tex clean-scripts clean-lwarp clean-docs clean-all-exclude-docs clean-all-include-docs n-tree lwarpmk limages find-html-deps compile-tex docs auto-run _check_venv _check_venv_activated
+.PHONY: help venv install-pylibs style-check clean-tex clean-scripts clean-lwarp clean-docs clean-all-exclude-docs clean-all-include-docs n-tree lwarpmk limages find-html-deps compile-tex docs auto-run _check_venv _check_venv_activated
+.DEFAULT_GOAL := help
+
+help:
+	@echo "Available commands:"
+	@echo "  make venv                          Create virtual environment and upgrade pip"
+	@echo "  make install-pylibs                Install Python libraries from $(PROCESS_DIR)/venvlibs.txt"
+	@echo "  make n-tree FILE=<name>            Run n_tree_analysis.py on <name>.tex"
+	@echo "  make style-check FILE=<name>       Run Stylometric_Analysis.py on <name>.pdf"
+	@echo "  make clean-tex                     Remove TeX build artifacts"
+	@echo "  make clean-scripts                 Remove script output artifacts"
+	@echo "  make clean-lwarp                   Remove lwarp artifacts"
+	@echo "  make clean-docs                    Remove docs/ directory"
+	@echo "  make clean-all-exclude-docs        Clean all artifacts except docs/"
+	@echo "  make clean-all-include-docs        Clean all artifacts including docs/"
+	@echo "  make docs FILE=<name>              Build docs/ from <name>.html"
+	@echo "  make lwarpmk FILE=<name>           Run lwarpmk html <name>"
+	@echo "  make limages FILE=<name>           Run lwarpmk limages if <name>-images.txt exists"
+	@echo "  make find-html-deps FILE=<name>    List href/src dependencies from <name>.html"
+	@echo "  make compile-tex FILE=<name>       Compile <name>.tex to PDF"
+	@echo "  make auto-run FILE=<name>          Run full build pipeline"
 
 venv:
 	@test -d "$(VENV_DIR)" || \
