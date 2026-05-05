@@ -497,14 +497,14 @@ May 4, 2026
 
 
 <p>
-<a href="Graphing-Continuous-Geometry-In-Racket-Guide.html#autosec-12" class="tocsubsection" >
-<span class="sectionnumber">1.2</span>&#x2003;Graphing a Standard Circle in <i>Racket</i></a>
+<a href="Graphing-Continuous-Geometry-In-Racket-Guide.html#autosec-12" class="tocsubsubsection" >
+<span class="sectionnumber">1.1.3</span>&#x2003;Graphing a Standard Circle in <i>Racket</i></a>
 </p>
 
 
 <p>
 <a href="Graphing-Continuous-Geometry-In-Racket-Guide.html#autosec-13" class="tocsubsection" >
-<span class="sectionnumber">1.3</span>&#x2003;Shifted Circles</a>
+<span class="sectionnumber">1.2</span>&#x2003;Shifted Circles</a>
 </p>
 
 
@@ -517,6 +517,12 @@ May 4, 2026
 <p>
 <a href="Graphing-Continuous-Geometry-In-Racket-Guide.html#autosec-15" class="tocsection" >
 <span class="sectionnumber">3</span>&#x2003;Hyperbolas and Transformations</a>
+</p>
+
+
+<p>
+<a href="Graphing-Continuous-Geometry-In-Racket-Guide.html#autosec-16" class="tocsection" >
+<span class="sectionnumber">4</span>&#x2003;Geometric Sequences?</a>
 </p>
 </nav>
 <!--
@@ -849,9 +855,9 @@ However, in the universe of lambda calculus, data does not exist; rather, we hav
 way for an operator to be applied on those values in our Church pair, is if given the operator by another function.
 </p>
 <!--
-...... subsection Graphing a Standard Circle in Racket ......
+...... subsubsection Graphing a Standard Circle in Racket ......
 -->
-<h5 id="autosec-12"><span class="sectionnumber">1.2&#x2003;</span>Graphing a Standard Circle in <i>Racket</i></h5>
+<h6 id="autosec-12"><span class="sectionnumber">1.1.3&#x2003;</span>Graphing a Standard Circle in <i>Racket</i></h6>
 <a id="Graphing-Continuous-Geometry-In-Racket-Guide-autopage-12"></a>
 
 
@@ -861,7 +867,7 @@ Here I will go over the actual code for graphing a standard circle with an origi
 <!--
 ...... subsection Shifted Circles ......
 -->
-<h5 id="autosec-13"><span class="sectionnumber">1.3&#x2003;</span>Shifted Circles</h5>
+<h5 id="autosec-13"><span class="sectionnumber">1.2&#x2003;</span>Shifted Circles</h5>
 <a id="Graphing-Continuous-Geometry-In-Racket-Guide-autopage-13"></a>
 
 
@@ -933,6 +939,146 @@ When given the equation \(x^2 = 4y + 8\), you start by doing smaller algebra:
 
 <p>
 The form \(y = ax^2 + bx + c\) is the most basic equation of a parabola.
+</p>
+<!--
+...... section Geometric Sequences? ......
+-->
+<h4 id="autosec-16"><span class="sectionnumber">4&#x2003;</span>Geometric Sequences?</h4>
+<a id="Graphing-Continuous-Geometry-In-Racket-Guide-autopage-16"></a>
+
+
+<p>
+I’m adding this section here, but I might just make a separate document for discrete mathematics, so this is just here temporarily for reference. In Geometric Sequences, each term is obtained through the multiplication of a previous
+term by a non-zero real number called the common ratio. The common ratio of a geometric sequence is the constant that you multiply each term by in order to get the next term in the sequence. The general formula for a common
+ratio is:
+</p>
+
+<span class="hidden"> \(\seteqnumber{0}{}{0}\)</span>
+
+<!--
+
+                                                                                                                       an
+                                                                                                                r=
+                                                                                                                      an−1
+
+-->
+
+<p>
+
+\begin{equation*}
+r = \frac {a_n}{a_{n-1}}
+\end{equation*}
+
+</p>
+
+<p>
+Note that this formula tells you how to compute r from two consecutive terms in a given geometric sequence. Now to actually find the common ratio \(r\), you start by diving any term by the term before it. For example, let’s say
+we are given the sequence \(5, 15, 45,...\), then we do:
+</p>
+
+<span class="hidden"> \(\seteqnumber{0}{}{0}\)</span>
+
+<!--
+
+
+
+                                                                                                            Let a2 = 15
+                                                                                                            an−1 = a2−1 = a1
+                                                                                                            a1 = 5
+                                                                                                                15
+                                                                                                            r=     =3
+                                                                                                                 5
+                                                                                                            r=3
+
+-->
+
+<p>
+
+\begin{equation*}
+\begin{split} &amp;\text {Let } a_{2} = 15 \\ &amp;a_{n-1} = a_{2-1} = a_{1} \\ &amp;a_{1} = 5 \\ &amp;r = \frac {15}{5} = 3 \\ &amp;r = 3 \end {split}
+\end{equation*}
+
+</p>
+
+<p>
+It might be worth mentioning that \(a_n\) doesn’t necessarily have to be the second term in a given sequence; it could be the fifth, third, sixth, et cetera.
+</p>
+
+<p>
+The general formula requires you to know two adjacent terms, such as \(a_1\) and \(a_2 \). But what if we only know \(a_2 = -8\) and \(a_5 = -216\)? In this case, we already know \(a_2\) so let’s just find the term before.
+We know that it takes 3 jumps to get from \(a_2\) to \(a_5\), which implies that it takes \(r^{3}\), but we include the starting term so its:
+</p>
+
+<span class="hidden"> \(\seteqnumber{0}{}{0}\)</span>
+
+<!--
+
+
+                                                                                                               a5 = a2 · r3
+
+-->
+
+<p>
+
+\begin{equation*}
+a_{5}=a_{2} \cdot r^{3}
+\end{equation*}
+
+</p>
+
+<p>
+What we just did is make our own formula. Now we plugin our known values:
+</p>
+
+<span class="hidden"> \(\seteqnumber{0}{}{0}\)</span>
+
+<!--
+
+
+
+                                                                                                             − 216 = −8 · r3
+                                                                                                            27 = r3
+                                                                                                            r=3
+                                                                                                             because 33 = 27
+
+-->
+
+<p>
+
+\begin{equation*}
+\begin{split} &amp;-216 = -8 \cdot r^3 \\ &amp;27 = r^3 \\ &amp;r = 3 \\ &amp;\text { because } 3^3 = 27 \end {split}
+\end{equation*}
+
+</p>
+
+<p>
+Now to find \(a_1\), we work backwards by a single step:
+</p>
+
+<span class="hidden"> \(\seteqnumber{0}{}{0}\)</span>
+
+<!--
+
+
+
+                                                                                                               a2 = a1 · r
+                                                                                                               − 8 = a1 · 3
+                                                                                                                      8
+                                                                                                               a1 = −
+                                                                                                                      3
+                                                                                                                      8
+                                                                                                               a1 = −
+                                                                                                                      3
+                                                                                                               r=3
+
+-->
+
+<p>
+
+\begin{equation*}
+\begin{split} &amp;a_2 = a_1 \cdot r \\ &amp;-8 = a_1 \cdot 3 \\ &amp;a_1 = -\frac {8}{3} \\ &amp;a_1 = -\frac {8}{3} \\ &amp;r = 3 \end {split}
+\end{equation*}
+
 </p>
 
 <a id="Graphing-Continuous-Geometry-In-Racket-Guide-autofile-last"></a>

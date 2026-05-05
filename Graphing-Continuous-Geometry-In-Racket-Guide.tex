@@ -103,7 +103,7 @@ ImagesName={lateximg-}
 	
 	\subsection{Standard Circles}
 	Graphing a standard circle with its centre at \((0,0)\).
-	\todo[inline color=blue!20 size=\small]{Here I might explain that the variables y and x in this context represent infinite number of points on a circle's boundary. They do not necessarily represent any particular single number.}
+	\todo[color=blue!20, size=\small]{Here I might explain that the variables y and x in this context represent infinite number of points on a circle's boundary. They do not necessarily represent any particular single number.}
 	Let us present a predicament in which we are given the equation \(x^2 + y^2 = 4\), and are tasked with plotting our circle in \iRac. One might be tempted to simply set the radius to 4; however, the true radius of this circle is 2. One may wonder how we arrived at this value--do the exponents of \(x\) and \(y\) denote the radius of the circle, or did we take the square root? Remember that we established the radius \Lr is equal to the magnitude:
 	\begin{equation*}
 		r = \vecnorm{u} = \sqrt{x^{2}+y^{2}}
@@ -157,7 +157,7 @@ ImagesName={lateximg-}
 		\vec{u} \cdot \vec{v} = u_x v_x + u_y v_y
 	\end{equation*}
 	This definition does not account for angles or shapes; hence, all it does is multiply and add lists of numbers. You would use this definition if you only knew the raw coordinates of two vectors \(\vec{u} = (u_x, u_y)\) and \(\vec{v} = (v_x, v_y)\). But what if we are handling geometric relationships? In that case, we would use the geometric definition of the dot product:
-	\todo[inline color=blue!20 size=\small]{I need to change those | symbols; I already defined a vecnorm macro with FootnotesMacros.}
+	\todo[color=blue!20, size=\tiny]{I need to change those | symbols; I already defined a vecnorm macro with FootnotesMacros.}
 	\begin{equation*}
 		\begin{split}
 		&\vec{u} \cdot \vec{v} = ||\vec{u}|| ||\vec{v}|| \cos(\theta) \\
@@ -166,11 +166,11 @@ ImagesName={lateximg-}
 	\end{equation*}
 	
 	\subsubsection*{Parametric Form in Lambda Calculus}
-	\todo[inline color=blue!20 size=\small]{I'm thinking that this section should actually be specifically about Racket and Lambda Calculus, and should additionally be moved up. Maybe it should instead be the first section. Otherwise, it may just get buried, and right now it just seems randomly placed.}
+	\todo[color=blue!20, size=\small]{I'm thinking that this section should actually be specifically about Racket and Lambda Calculus, and should additionally be moved up. Maybe it should instead be the first section. Otherwise, it may just get buried, and right now it just seems randomly placed.}
 	In pure lambda calculus, we do not have pairs; instead, what we use are church pairs. A church pair is a function which itself takes another function and applies it to our two values. \iRac uses what is called prefix notation. Prefix notation is a model of evaluation which evaluates a combination (+ 1 2), by applying the left most operator (+) and applies it to the operands (1 2). It is natural to assume that a church pair is equivalent to prefix evaluation. However, in the universe of lambda calculus, data does not exist; rather, we have functions.
 	Data is something which can be considered inactive, while a Church pair is an active function that possesses your two values. And the only way for an operator to be applied on those values in our Church pair, is if given the operator by another function.
 	
-	\subsection{Graphing a Standard Circle in \iRac}
+	\subsubsection{Graphing a Standard Circle in \iRac}
 	Here I will go over the actual code for graphing a standard circle with an origin at \((0,0)\).
 	
 	\subsection{Shifted Circles}
@@ -192,5 +192,47 @@ ImagesName={lateximg-}
 	\end{split}
 	\end{equation*}
 	The form \(y = ax^2 + bx + c\) is the most basic equation of a parabola.
+	
+	\section{Geometric Sequences?}
+	I'm adding this section here, but I might just make a separate document for discrete mathematics, so this is just here temporarily for reference.
+	In Geometric Sequences, each term is obtained through the multiplication of a previous term by a non-zero real number called the common ratio. The common ratio of a geometric sequence is the constant that you multiply each term by in order to get the next term in the sequence. The general formula for a common ratio is:
+	\begin{equation*}
+		r = \frac{a_n}{a_{n-1}}
+	\end{equation*}
+	Note that this formula tells you how to compute r from two consecutive terms in a given geometric sequence. Now to actually find the common ratio \(r\), you start by diving any term by the term before it. For example, let's say we are given the sequence \(5, 15, 45,...\), then we do:
+	\begin{equation*}
+	\begin{split}
+		&\text{Let } a_{2} = 15 \\
+		&a_{n-1} = a_{2-1} = a_{1} \\
+		&a_{1} = 5 \\
+		&r = \frac{15}{5} = 3 \\
+		&r = 3
+	\end{split}
+	\end{equation*}
+	It might be worth mentioning that \(a_n\) doesn't necessarily have to be the second term in a given sequence; it could be the fifth, third, sixth, et cetera.
+	
+	The general formula requires you to know two adjacent terms, such as \( a_1\) and \(a_2 \). But what if we only know \(a_2 = -8\) and \(a_5 = -216\)? In this case, we already know \(a_2\) so let's just find the term before. We know that it takes 3 jumps to get from \(a_2\) to \(a_5\), which implies that it takes \(r^{3}\), but we include the starting term so its:
+	\begin{equation*}
+	a_{5}=a_{2} \cdot r^{3}
+	\end{equation*}
+	What we just did is make our own formula. Now we plugin our known values:
+	\begin{equation*}
+	\begin{split}
+	&-216 = -8 \cdot r^3 \\
+	&27 = r^3 \\
+	&r = 3 \\
+	&\text{ because } 3^3 = 27
+	\end{split}
+	\end{equation*}
+	Now to find \(a_1\), we work backwards by a single step:
+	\begin{equation*}
+	\begin{split}
+	&a_2 = a_1 \cdot r \\
+	&-8 = a_1 \cdot 3 \\
+	&a_1 = -\frac{8}{3} \\
+	&a_1 = -\frac{8}{3} \\
+	&r = 3
+	\end{split}
+	\end{equation*}
 	
 \end{document}
