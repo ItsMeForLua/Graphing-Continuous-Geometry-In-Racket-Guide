@@ -4,7 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="generator" content="LaTeX Lwarp package" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Directed Dimensions: Basic and Fundamental Transformations in n-dimensional Space</title>
+<title>A Guide to Graphing Continuous Geometry in Racket</title>
 <link rel="stylesheet" type="text/css" href="lwarp.css" />
 
 <script>
@@ -240,7 +240,7 @@ MathJax = {
 
 <section class="textbody">
 
-<a id="Racket-Guide-To-Geometry-autofile-0"></a>
+<a id="Graphing-Continuous-Geometry-In-Racket-Guide-autofile-0"></a>
 
 <!--MathJax customizations:-->
 <div data-nosnippet
@@ -435,10 +435,10 @@ MathJax = {
 
 </div>
 
-<a id="Racket-Guide-To-Geometry-autopage-1"></a>
+<a id="Graphing-Continuous-Geometry-In-Racket-Guide-autopage-1"></a>
 <div class="titlepage">
 
-<h1>Directed Dimensions: Basic and Fundamental Transformations in n-dimensional Space</h1>
+<h1>A Guide to Graphing Continuous Geometry in Racket</h1>
 
 
 <div class="author">
@@ -457,7 +457,7 @@ Andrew D. France
 <div class="titledate">
 
 <p>
-May 3, 2026
+May 4, 2026
 </p>
 </div>
 
@@ -466,56 +466,56 @@ May 3, 2026
 ...... section Contents ......
 -->
 <h4 id="autosec-3">Contents</h4>
-<a id="Racket-Guide-To-Geometry-autopage-3"></a>
+<a id="Graphing-Continuous-Geometry-In-Racket-Guide-autopage-3"></a>
 
 
 
 <nav class="toc">
 
 <p>
-<a href="Racket-Guide-To-Geometry.html#autosec-4" class="tocsection" >
+<a href="Graphing-Continuous-Geometry-In-Racket-Guide.html#autosec-4" class="tocsection" >
 <span class="sectionnumber">1</span>&#x2003;Circles and Transformations</a>
 </p>
 
 
 <p>
-<a href="Racket-Guide-To-Geometry.html#autosec-6" class="tocsubsection" >
+<a href="Graphing-Continuous-Geometry-In-Racket-Guide.html#autosec-6" class="tocsubsection" >
 <span class="sectionnumber">1.1</span>&#x2003;Standard Circles</a>
 </p>
 
 
 <p>
-<a href="Racket-Guide-To-Geometry.html#autosec-8" class="tocsubsection" >
-<span class="sectionnumber">1.2</span>&#x2003;Parametric Transformation of Representation</a>
+<a href="Graphing-Continuous-Geometry-In-Racket-Guide.html#autosec-8" class="tocsubsubsection" >
+<span class="sectionnumber">1.1.1</span>&#x2003;Parametric Transformation of Representation</a>
 </p>
 
 
 <p>
-<a href="Racket-Guide-To-Geometry.html#autosec-10" class="tocsubsubsection" >
-<span class="sectionnumber">1.2.1</span>&#x2003;Parametric Form as Dot Product</a>
+<a href="Graphing-Continuous-Geometry-In-Racket-Guide.html#autosec-10" class="tocsubsubsection" >
+<span class="sectionnumber">1.1.2</span>&#x2003;Parametric Form as Dot Product</a>
 </p>
 
 
 <p>
-<a href="Racket-Guide-To-Geometry.html#autosec-12" class="tocsubsection" >
-<span class="sectionnumber">1.3</span>&#x2003;Graphing a Standard Circle in <i>Racket</i></a>
+<a href="Graphing-Continuous-Geometry-In-Racket-Guide.html#autosec-12" class="tocsubsection" >
+<span class="sectionnumber">1.2</span>&#x2003;Graphing a Standard Circle in <i>Racket</i></a>
 </p>
 
 
 <p>
-<a href="Racket-Guide-To-Geometry.html#autosec-13" class="tocsubsection" >
-<span class="sectionnumber">1.4</span>&#x2003;Shifted Circles</a>
+<a href="Graphing-Continuous-Geometry-In-Racket-Guide.html#autosec-13" class="tocsubsection" >
+<span class="sectionnumber">1.3</span>&#x2003;Shifted Circles</a>
 </p>
 
 
 <p>
-<a href="Racket-Guide-To-Geometry.html#autosec-14" class="tocsection" >
+<a href="Graphing-Continuous-Geometry-In-Racket-Guide.html#autosec-14" class="tocsection" >
 <span class="sectionnumber">2</span>&#x2003;Parabolas and Transformations</a>
 </p>
 
 
 <p>
-<a href="Racket-Guide-To-Geometry.html#autosec-15" class="tocsection" >
+<a href="Graphing-Continuous-Geometry-In-Racket-Guide.html#autosec-15" class="tocsection" >
 <span class="sectionnumber">3</span>&#x2003;Hyperbolas and Transformations</a>
 </p>
 </nav>
@@ -523,7 +523,7 @@ May 3, 2026
 ...... section Circles and Transformations ......
 -->
 <h4 id="autosec-4"><span class="sectionnumber">1&#x2003;</span>Circles and Transformations</h4>
-<a id="Racket-Guide-To-Geometry-autopage-4"></a>
+<a id="Graphing-Continuous-Geometry-In-Racket-Guide-autopage-4"></a>
 
 
 <p>
@@ -570,7 +570,7 @@ The variables in a circle’s standard equation are squared because it directly 
 </p>
 <div role="note" class="footnotes">
 
-<a id="Racket-Guide-To-Geometry-autopage-5"></a>
+<a id="Graphing-Continuous-Geometry-In-Racket-Guide-autopage-5"></a>
 <p>
 <span
      class="makebox"
@@ -585,7 +585,7 @@ abstract measurement that exists only contextually rather than distinctly.
 ...... subsection Standard Circles ......
 -->
 <h5 id="autosec-6"><span class="sectionnumber">1.1&#x2003;</span>Standard Circles</h5>
-<a id="Racket-Guide-To-Geometry-autopage-6"></a>
+<a id="Graphing-Continuous-Geometry-In-Racket-Guide-autopage-6"></a>
 
 
 <p>
@@ -682,7 +682,7 @@ What we can now conclude is that the equation \(x^{2}+y^{2}=4\) is simply a cons
 </p>
 <div role="note" class="footnotes">
 
-<a id="Racket-Guide-To-Geometry-autopage-7"></a>
+<a id="Graphing-Continuous-Geometry-In-Racket-Guide-autopage-7"></a>
 <p>
 <span
      class="makebox"
@@ -694,10 +694,10 @@ quantities are equal to eachother: \(\text {if } a=b \text { and } b=c, \text { 
 
 </div>
 <!--
-...... subsection Parametric Transformation of Representation ......
+...... subsubsection Parametric Transformation of Representation ......
 -->
-<h5 id="autosec-8"><span class="sectionnumber">1.2&#x2003;</span>Parametric Transformation of Representation</h5>
-<a id="Racket-Guide-To-Geometry-autopage-8"></a>
+<h6 id="autosec-8"><span class="sectionnumber">1.1.1&#x2003;</span>Parametric Transformation of Representation</h6>
+<a id="Graphing-Continuous-Geometry-In-Racket-Guide-autopage-8"></a>
 
 
 <p>
@@ -765,7 +765,7 @@ to a parametric equation, we took our circular direction and scaled it outward b
 </p>
 <div role="note" class="footnotes">
 
-<a id="Racket-Guide-To-Geometry-autopage-9"></a>
+<a id="Graphing-Continuous-Geometry-In-Racket-Guide-autopage-9"></a>
 <p>
 <span
      class="makebox"
@@ -787,8 +787,8 @@ use is partly borrowed from the Latin <i>syntaxis</i> which itself was developed
 <!--
 ...... subsubsection Parametric Form as Dot Product ......
 -->
-<h6 id="autosec-10"><span class="sectionnumber">1.2.1&#x2003;</span>Parametric Form as Dot Product</h6>
-<a id="Racket-Guide-To-Geometry-autopage-10"></a>
+<h6 id="autosec-10"><span class="sectionnumber">1.1.2&#x2003;</span>Parametric Form as Dot Product</h6>
+<a id="Graphing-Continuous-Geometry-In-Racket-Guide-autopage-10"></a>
 
 
 <p>
@@ -839,7 +839,7 @@ This definition does not account for angles or shapes; hence, all it does is mul
 ...... subsubsection Parametric Form in Lambda Calculus ......
 -->
 <h6 id="autosec-11">Parametric Form in Lambda Calculus</h6>
-<a id="Racket-Guide-To-Geometry-autopage-11"></a>
+<a id="Graphing-Continuous-Geometry-In-Racket-Guide-autopage-11"></a>
 
 
 <p>
@@ -851,8 +851,8 @@ way for an operator to be applied on those values in our Church pair, is if give
 <!--
 ...... subsection Graphing a Standard Circle in Racket ......
 -->
-<h5 id="autosec-12"><span class="sectionnumber">1.3&#x2003;</span>Graphing a Standard Circle in <i>Racket</i></h5>
-<a id="Racket-Guide-To-Geometry-autopage-12"></a>
+<h5 id="autosec-12"><span class="sectionnumber">1.2&#x2003;</span>Graphing a Standard Circle in <i>Racket</i></h5>
+<a id="Graphing-Continuous-Geometry-In-Racket-Guide-autopage-12"></a>
 
 
 <p>
@@ -861,8 +861,8 @@ Here I will go over the actual code for graphing a standard circle with an origi
 <!--
 ...... subsection Shifted Circles ......
 -->
-<h5 id="autosec-13"><span class="sectionnumber">1.4&#x2003;</span>Shifted Circles</h5>
-<a id="Racket-Guide-To-Geometry-autopage-13"></a>
+<h5 id="autosec-13"><span class="sectionnumber">1.3&#x2003;</span>Shifted Circles</h5>
+<a id="Graphing-Continuous-Geometry-In-Racket-Guide-autopage-13"></a>
 
 
 <p>
@@ -893,12 +893,12 @@ I should have already clarified (according to a todonote) that x and y represent
 ...... section Parabolas and Transformations ......
 -->
 <h4 id="autosec-14"><span class="sectionnumber">2&#x2003;</span>Parabolas and Transformations</h4>
-<a id="Racket-Guide-To-Geometry-autopage-14"></a>
+<a id="Graphing-Continuous-Geometry-In-Racket-Guide-autopage-14"></a>
 <!--
 ...... section Hyperbolas and Transformations ......
 -->
 <h4 id="autosec-15"><span class="sectionnumber">3&#x2003;</span>Hyperbolas and Transformations</h4>
-<a id="Racket-Guide-To-Geometry-autopage-15"></a>
+<a id="Graphing-Continuous-Geometry-In-Racket-Guide-autopage-15"></a>
 
 
 <p>
@@ -935,7 +935,7 @@ When given the equation \(x^2 = 4y + 8\), you start by doing smaller algebra:
 The form \(y = ax^2 + bx + c\) is the most basic equation of a parabola.
 </p>
 
-<a id="Racket-Guide-To-Geometry-autofile-last"></a>
+<a id="Graphing-Continuous-Geometry-In-Racket-Guide-autofile-last"></a>
 </section>
 
 </main>
